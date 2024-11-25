@@ -33,19 +33,18 @@ public class RoomServiceTests
     public void TestOutputLaserPath(Laser laser, MirrorOrientation orientation, MirrorReflection reflection,
         Laser expectedLaser)
     {
-        var room = new Room(0, 0)
-        {
-            Orientation = orientation,
-            Reflection = reflection
-        };
-
         var input = new InputFile(1, 1, [], 0, 0, Laser.Bottom);
         
         var repository = new LaserRepository(input);
+
+        var room = repository.GetRoom(0, 0);
+
+        room.Orientation = orientation;
+        room.Reflection = reflection;
         
         var service = new RoomService(repository);
 
-        var outputLaser = service.GetOutputLaser(room, laser);
+        var outputLaser = service.GetOutputLaser(0, 0, laser);
 
         outputLaser.Should().Be(expectedLaser);
     }

@@ -63,46 +63,44 @@ public class RoomService(ILaserRepository repository) : IRoomService
 
     public bool GetNextRoom(int x, int y, Laser inputLaser, out NextRoom nextRoomInfo)
     {
-        // Get room by coordinates from repository
-        var room = repository.GetRoom(x, y);
-        // Get output laser based on room definition
-        var outputLaser = GetOutputLaser(room, inputLaser);
+        // Get output laser based on room
+        var outputLaser = GetOutputLaser(x, y, inputLaser);
         
         // Convert output laser into input laser based on grid location
         switch (outputLaser)
         {
             case Laser.Bottom:
                 // If laser will not go through bottom edge of grid
-                if (room.Y != 0)
+                if (y != 0)
                 {
-                    nextRoomInfo = new NextRoom(room.X, room.Y - 1, Laser.Top);
+                    nextRoomInfo = new NextRoom(x, y - 1, Laser.Top);
                     return true;
                 }
 
                 break;
             case Laser.Top:
                 // If laser will not go through top edge of grid
-                if (room.Y != repository.Height - 1)
+                if (y != repository.Height - 1)
                 {
-                    nextRoomInfo = new NextRoom(room.X, room.Y + 1, Laser.Bottom);
+                    nextRoomInfo = new NextRoom(x, y + 1, Laser.Bottom);
                     return true;
                 }
 
                 break;
             case Laser.Left:
                 // if laser will not go through left edge of grid
-                if (room.X != 0)
+                if (x != 0)
                 {
-                    nextRoomInfo = new NextRoom(room.X - 1, room.Y, Laser.Right);
+                    nextRoomInfo = new NextRoom(x - 1, y, Laser.Right);
                     return true;
                 }
 
                 break;
             case Laser.Right:
                 // if laser will not go through right edge of grid
-                if (room.X != repository.Width - 1)
+                if (x != repository.Width - 1)
                 {
-                    nextRoomInfo = new NextRoom(room.X + 1, room.Y, Laser.Left);
+                    nextRoomInfo = new NextRoom(x + 1, y, Laser.Left);
                     return true;
                 }
 
@@ -110,7 +108,7 @@ public class RoomService(ILaserRepository repository) : IRoomService
         }
 
         // We are at edge of grid, which means we are exiting, set nextRoomInfo to X, Y coordinates of exit room, and use output laser as the direction of exit.
-        nextRoomInfo = new NextRoom(room.X, room.Y, outputLaser);
+        nextRoomInfo = new NextRoom(x, y, outputLaser);
         return false;
     }
 
@@ -118,8 +116,9 @@ public class RoomService(ILaserRepository repository) : IRoomService
      *  Get direction of output laser based on Mirror orientation and reflection, and return the direction the laser will exit
      *  Note: Output laser direction is NOT the direction of input laser for the next room
      */
-    public Laser GetOutputLaser(Room room, Laser inputLaser)
+    public Laser GetOutputLaser(int x, int y, Laser inputLaser)
     {
+        var room = repository.GetRoom(x, y);
         switch (inputLaser)
         {
             case Laser.Left:
