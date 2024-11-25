@@ -30,7 +30,6 @@ public static class LaserPathExtensions
         {
             "L" => MirrorReflection.Left,
             "R" => MirrorReflection.Right,
-            "" => MirrorReflection.Both,
             _ => throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null)
         };
     }

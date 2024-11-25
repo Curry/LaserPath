@@ -8,6 +8,7 @@ namespace LaserPath.Tests;
 
 public class RoomServiceTests
 {
+    // Tests sample input files
     [Theory]
     [ClassData(typeof(RoomServiceFullDataGenerator))]
     public void TestRoomServiceFull(string file, NextRoom expectedExitRoom, string expectedOutputString)
@@ -26,6 +27,7 @@ public class RoomServiceTests
         output.Should().BeEquivalentTo(expectedOutputString);
     }
 
+    // Verifies all combination of orientation,reflection with input laser direction returns valid output laser direction
     [Theory]
     [ClassData(typeof(OutputLaserPathDataGenerator))]
     public void TestOutputLaserPath(Laser laser, MirrorOrientation orientation, MirrorReflection reflection,
@@ -48,6 +50,7 @@ public class RoomServiceTests
         outputLaser.Should().Be(expectedLaser);
     }
 
+    // Verifies mirrors set up properly with given text
     [Theory]
     [ClassData(typeof(SetupMirrorsDataGenerator))]
     public void TestSetupMirrors(string mirror,
@@ -64,5 +67,22 @@ public class RoomServiceTests
         var room = repository.GetRoom(expectedMirror.x, expectedMirror.y);
         room.Orientation.Should().Be(expectedMirror.orientation);
         room.Reflection.Should().Be(expectedMirror.reflection);
+    }
+
+    // Verifies laser gets next room or exit properly, based on 2x2 grid, combination of all 4 rooms and all 4 laser directions
+    [Theory]
+    [ClassData(typeof(NextRoomDataGenerator))]
+    public void TestGetNextRoom(int x, int y, Laser inputLaser, bool expectedIsNotEdge, NextRoom expectedNextRoom)
+    {
+        var input = new InputFile(2, 2, [], x, y, inputLaser);
+        
+        var repository = new LaserRepository(input);
+        var service = new RoomService(repository);
+
+        var isNotEdge = service.GetNextRoom(x, y, inputLaser, out var nextRoom);
+
+        isNotEdge.Should().Be(expectedIsNotEdge);
+        
+        nextRoom.Should().BeEquivalentTo(expectedNextRoom);
     }
 }

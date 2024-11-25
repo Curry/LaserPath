@@ -267,6 +267,7 @@ public class RoomService(ILaserRepository repository) : IRoomService
                 return Laser.Bottom;
             default:
                 // This is here to make sure all cases are covered, but as the use cases are exhaustive, this should never be reached
+                // Room will never have a reflection without orientation
                 throw new ArgumentOutOfRangeException(nameof(inputLaser), inputLaser, "Invalid Room/Laser orientation");
         }
     }
