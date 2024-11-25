@@ -1,292 +1,15 @@
-﻿using System.Collections;
-using FluentAssertions;
+﻿using FluentAssertions;
 using LaserPath.Domain;
 using LaserPath.Services;
+using LaserPath.Tests.DataGenerator;
 
 namespace LaserPath.Tests;
-
-public class FullDataTestGenerator : IEnumerable<object[]>
-{
-    public IEnumerator<object[]> GetEnumerator()
-    {
-        yield return
-        [
-            """
-            5,4
-            -1
-            1,2RR
-            3,2L
-            -1
-            1,0V
-            -1
-            """,
-            new NextRoom(3, 0, Laser.Bottom)
-        ];
-        yield return
-        [
-            """
-            5,4
-            -1
-            1,2RR
-            3,2L
-            -1
-            0,2H
-            -1
-            """,
-            new NextRoom(3, 0, Laser.Bottom)
-        ];
-        yield return
-        [
-            """
-            5,4
-            -1
-            1,2RR
-            3,2L
-            3,1R
-            1,1RL
-            -1
-            0,2H
-            -1
-            """,
-            new NextRoom(0, 1, Laser.Left)
-        ];
-        yield return
-        [
-            """
-            5,4
-            -1
-            1,0R
-            1,2LR
-            1,3RR
-            4,3L
-            -1
-            0,0H
-            -1
-            """,
-            new NextRoom(4, 0, Laser.Bottom)
-        ];
-    }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}
-
-public class LaserPathDataGenerator : IEnumerable<object[]>
-{
-    public IEnumerator<object[]> GetEnumerator()
-    {
-        // Laser Left
-        yield return
-        [
-            Laser.Left,
-            MirrorOrientation.Left,
-            MirrorReflection.Both,
-            Laser.Bottom
-        ];
-        yield return
-        [
-            Laser.Left,
-            MirrorOrientation.Left,
-            MirrorReflection.Left,
-            Laser.Bottom
-        ];
-        yield return
-        [
-            Laser.Left,
-            MirrorOrientation.Left,
-            MirrorReflection.Right,
-            Laser.Right
-        ];
-        yield return
-        [
-            Laser.Left,
-            MirrorOrientation.Right,
-            MirrorReflection.Both,
-            Laser.Top
-        ];
-        yield return
-        [
-            Laser.Left,
-            MirrorOrientation.Right,
-            MirrorReflection.Left,
-            Laser.Top
-        ];
-        yield return
-        [
-            Laser.Left,
-            MirrorOrientation.Right,
-            MirrorReflection.Right,
-            Laser.Right
-        ];
-        yield return
-        [
-            Laser.Left,
-            MirrorOrientation.None,
-            MirrorReflection.None,
-            Laser.Right
-        ];
-        
-        // Laser Right
-        yield return
-        [
-            Laser.Right,
-            MirrorOrientation.Left,
-            MirrorReflection.Both,
-            Laser.Top
-        ];
-        yield return
-        [
-            Laser.Right,
-            MirrorOrientation.Left,
-            MirrorReflection.Left,
-            Laser.Left
-        ];
-        yield return
-        [
-            Laser.Right,
-            MirrorOrientation.Left,
-            MirrorReflection.Right,
-            Laser.Top
-        ];
-        yield return
-        [
-            Laser.Right,
-            MirrorOrientation.Right,
-            MirrorReflection.Both,
-            Laser.Bottom
-        ];
-        yield return
-        [
-            Laser.Right,
-            MirrorOrientation.Right,
-            MirrorReflection.Left,
-            Laser.Left
-        ];
-        yield return
-        [
-            Laser.Right,
-            MirrorOrientation.Right,
-            MirrorReflection.Right,
-            Laser.Bottom
-        ];
-        yield return
-        [
-            Laser.Right,
-            MirrorOrientation.None,
-            MirrorReflection.None,
-            Laser.Left
-        ];
-        
-        // Laser Top
-        yield return
-        [
-            Laser.Top,
-            MirrorOrientation.Left,
-            MirrorReflection.Both,
-            Laser.Right
-        ];
-        yield return
-        [
-            Laser.Top,
-            MirrorOrientation.Left,
-            MirrorReflection.Left,
-            Laser.Bottom
-        ];
-        yield return
-        [
-            Laser.Top,
-            MirrorOrientation.Left,
-            MirrorReflection.Right,
-            Laser.Right
-        ];
-        yield return
-        [
-            Laser.Top,
-            MirrorOrientation.Right,
-            MirrorReflection.Both,
-            Laser.Left
-        ];
-        yield return
-        [
-            Laser.Top,
-            MirrorOrientation.Right,
-            MirrorReflection.Left,
-            Laser.Left
-        ];
-        yield return
-        [
-            Laser.Top,
-            MirrorOrientation.Right,
-            MirrorReflection.Right,
-            Laser.Bottom
-        ];
-        yield return
-        [
-            Laser.Top,
-            MirrorOrientation.None,
-            MirrorReflection.None,
-            Laser.Bottom
-        ];
-        
-        // Laser Bottom
-        yield return
-        [
-            Laser.Bottom,
-            MirrorOrientation.Left,
-            MirrorReflection.Both,
-            Laser.Left
-        ];
-        yield return
-        [
-            Laser.Bottom,
-            MirrorOrientation.Left,
-            MirrorReflection.Left,
-            Laser.Left
-        ];
-        yield return
-        [
-            Laser.Bottom,
-            MirrorOrientation.Left,
-            MirrorReflection.Right,
-            Laser.Top
-        ];
-        yield return
-        [
-            Laser.Bottom,
-            MirrorOrientation.Right,
-            MirrorReflection.Both,
-            Laser.Right
-        ];
-        yield return
-        [
-            Laser.Bottom,
-            MirrorOrientation.Right,
-            MirrorReflection.Left,
-            Laser.Top
-        ];
-        yield return
-        [
-            Laser.Bottom,
-            MirrorOrientation.Right,
-            MirrorReflection.Right,
-            Laser.Right
-        ];
-        yield return
-        [
-            Laser.Bottom,
-            MirrorOrientation.None,
-            MirrorReflection.None,
-            Laser.Top
-        ];
-    }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}
 
 public class RoomServiceTests
 {
     [Theory]
-    [ClassData(typeof(FullDataTestGenerator))]
-    public void TestRoomServiceParser(string file, NextRoom expectedExitRoom)
+    [ClassData(typeof(RoomServiceFullDataTestGenerator))]
+    public void TestRoomServiceFull(string file, NextRoom expectedExitRoom, string expectedOutputString)
     {
         var fileService = new InputFileReaderService();
         var parsedFile = fileService.ParseInputFileText(file);
@@ -294,11 +17,15 @@ public class RoomServiceTests
 
         var room = service.GetExitRoom();
 
+        var output = service.GetConsoleOutput(room);
+
         room.Should().BeEquivalentTo(expectedExitRoom);
+        
+        output.Should().BeEquivalentTo(expectedOutputString);
     }
 
     [Theory]
-    [ClassData(typeof(LaserPathDataGenerator))]
+    [ClassData(typeof(OutputLaserPathDataGenerator))]
     public void TestOutputLaserPath(Laser laser, MirrorOrientation orientation, MirrorReflection reflection,
         Laser expectedLaser)
     {

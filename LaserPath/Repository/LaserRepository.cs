@@ -23,28 +23,9 @@ public class LaserRepository : ILaserRepository
         return rooms[x, y];
     }
 
-    public void SetupMirrors(int x, int y, string[] values)
+    public void SetupMirrors(int x, int y, MirrorOrientation orientation, MirrorReflection reflection)
     {
-        var room = rooms[x, y];
-        
-        room.Orientation = values[0] switch
-        {
-            "L" => MirrorOrientation.Left,
-            "R" => MirrorOrientation.Right,
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        if (values.Length == 2)
-        {
-            room.Reflection = values[1] switch
-            {
-                "L" => MirrorReflection.Left,
-                "R" => MirrorReflection.Right,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-        }
-        else
-        {
-            room.Reflection = MirrorReflection.Both;
-        }
+        rooms[x, y].Orientation = orientation;
+        rooms[x, y].Reflection = reflection;
     }
 }
