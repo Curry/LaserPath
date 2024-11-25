@@ -26,7 +26,7 @@ The dimensions of the board
 The start position of the laser in the format (X, Y) and the orientation (H or V)
 The exit point of the laser in the format (X, Y) and the orientation (H or V)
 ```
-Width: 5, Height: 4
-StartX: 0, StartY: 2, Laser: H
-EndX: 0, EndY: 1, Laser: H
+Dimensions: Width: 5, Height: 4
+Laser Start: (0, 2), Orientation: H
+Laser Exit: (3, 0), Orientation: V
 ```
