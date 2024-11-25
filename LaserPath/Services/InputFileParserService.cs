@@ -5,12 +5,12 @@ namespace LaserPath.Services;
 
 public class InputFileReaderService : IInputFileReaderService
 {
-    // Read file only in function to make sure StreamReader is disposed immediately after reading.
+    // Read file only in function to make sure StreamReader is disposed immediately after reading, so file is not in use anytime outside of initial reading
     public async Task<string> ReadInputFileAsync(string inputFilePath)
     {
         using var reader = new StreamReader(inputFilePath);
 
-        return await reader.ReadToEndAsync();;
+        return await reader.ReadToEndAsync();
     }
 
     public InputFile ParseInputFileText(string fileContent)

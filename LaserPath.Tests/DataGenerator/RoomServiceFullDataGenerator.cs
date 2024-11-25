@@ -3,10 +3,11 @@ using LaserPath.Domain;
 
 namespace LaserPath.Tests.DataGenerator;
 
-public class RoomServiceFullDataTestGenerator : IEnumerable<object[]>
+public class RoomServiceFullDataGenerator : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
+        // Verify Exit Bottom
         yield return
         [
             """
@@ -25,6 +26,44 @@ public class RoomServiceFullDataTestGenerator : IEnumerable<object[]>
             EndX: 3, EndY: 0, Laser: V
             """
         ];
+        // Verify Exit Top
+        yield return
+        [
+            """
+            5,4
+            -1
+            1,2RR
+            3,2RL
+            -1
+            1,0V
+            -1
+            """,
+            new NextRoom(3, 3, Laser.Top),
+            """
+            Width: 5, Height: 4
+            StartX: 1, StartY: 0, Laser: V
+            EndX: 3, EndY: 3, Laser: V
+            """
+        ];
+        // Verify exit Right
+        yield return
+        [
+            """
+            5,4
+            -1
+            1,2RR
+            -1
+            1,0V
+            -1
+            """,
+            new NextRoom(4, 2, Laser.Right),
+            """
+            Width: 5, Height: 4
+            StartX: 1, StartY: 0, Laser: V
+            EndX: 4, EndY: 2, Laser: H
+            """
+        ];
+        // Verify Exit Bottom
         yield return
         [
             """

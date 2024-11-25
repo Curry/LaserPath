@@ -4,14 +4,28 @@ namespace LaserPath.Repository;
 
 public class LaserRepository : ILaserRepository
 {
+    public int Width { get; }
+    public int Height { get; }
+    public int StartX { get; }
+    public int StartY { get; }
+    public Laser StartLaser { get; }
+    public string[] Mirrors { get; }
+    
     private readonly Room[,] rooms;
 
-    public LaserRepository(int width, int height)
+    public LaserRepository(InputFile inputFile)
     {
-        rooms = new Room[width, height];
-        for (var i = 0; i < width; i++)
+        Width = inputFile.Width;
+        Height = inputFile.Height;
+        StartX = inputFile.StartX;
+        StartY = inputFile.StartY;
+        StartLaser = inputFile.StartLaser;
+        Mirrors = inputFile.Mirrors;
+        
+        rooms = new Room[Width, Height];
+        for (var i = 0; i < Width; i++)
         {
-            for (var j = 0; j < height; j++)
+            for (var j = 0; j < Height; j++)
             {
                 rooms[i, j] = new Room(i, j);
             }

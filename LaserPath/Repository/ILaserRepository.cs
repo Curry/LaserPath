@@ -4,6 +4,12 @@ namespace LaserPath.Repository;
 
 public interface ILaserRepository
 {
-    public Room GetRoom(int x, int y);
-    public void SetupMirrors(int x, int y, MirrorOrientation orientation, MirrorReflection reflection);
+    int Width { get; }
+    int Height { get; }
+    int StartX { get; }
+    int StartY { get; }
+    Laser StartLaser { get; }
+    string[] Mirrors { get; }
+    Room GetRoom(int x, int y);
+    void SetupMirrors(int x, int y, MirrorOrientation orientation, MirrorReflection reflection);
 }

@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
+﻿using LaserPath.Repository;
 using LaserPath.Services;
 
 if (args.Length != 1)
@@ -16,8 +15,10 @@ var fileContent = await inputService.ReadInputFileAsync(path);
 
 var parsedFile = inputService.ParseInputFileText(fileContent);
 
-var service = new RoomService(parsedFile);
+var repository = new LaserRepository(parsedFile);
 
-var exitRoom = service.GetExitRoom();
+var service = new RoomService(repository);
+
+var exitRoom = service.CalculateExitRoom();
 
 Console.WriteLine(service.GetConsoleOutput(exitRoom));

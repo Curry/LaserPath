@@ -5,56 +5,16 @@ using LaserPath.Repository;
 
 namespace LaserPath.Services;
 
-public class RoomService : IRoomService
+public class RoomService(ILaserRepository repository) : IRoomService
 {
-    private readonly int height;
-    private readonly int width;
-    private readonly int startX;
-    private readonly int startY;
-    private readonly Laser startLaser;
-    
-    private readonly ILaserRepository repository;
-
-    public RoomService(InputFile inputFile)
+    public NextRoom CalculateExitRoom()
     {
-        width = inputFile.Width;
-        height = inputFile.Height;
-        startX = inputFile.StartX;
-        startY = inputFile.StartY;
-        startLaser = inputFile.StartLaser;
-        
-        repository = new LaserRepository(width, height);
+        SetupMirrors();
 
-        foreach (var mirror in inputFile.Mirrors)
-            SetupMirrors(mirror);
-    }
-    
-    public void SetupMirrors(string mirrorDefinition)
-    {
-        // Regex.Split adds empty strings at the head/tail due to pattern matching, so removing those will allow better parsing later
-        var mirror = Regex.Split(mirrorDefinition, "([0-9]+),([0-9]+)([LRlr]{1})([LRlr]{0,1})")
-            .Where(y => !string.IsNullOrWhiteSpace(y)).ToArray();
-        var x = int.Parse(mirror[0]);
-        var y = int.Parse(mirror[1]);
+        var x = repository.StartX;
+        var y = repository.StartY;
+        var laser = repository.StartLaser;
         
-        // ranging operator allows array selection from 3rd element to end of array
-        var mirrorState = mirror[2..];
-
-        var orientation = mirrorState[0].ToMirrorOrientation();
-        var reflection = MirrorReflection.Both;
-        
-        if (mirrorState.Length == 2)
-            reflection = mirrorState[1].ToMirrorReflection();
-        
-        repository.SetupMirrors(x, y, orientation, reflection);
-    }
-
-    public NextRoom GetExitRoom()
-    {
-        int x = startX;
-        int y = startY;
-        var laser = startLaser;
-
         NextRoom nextRoom;
         
         // Loop until false, which means nextRoom is exiting the grid
@@ -72,10 +32,33 @@ public class RoomService : IRoomService
     public string GetConsoleOutput(NextRoom exitRoom)
     {
         return $"""
-                Width: {width}, Height: {height}
-                StartX: {startX}, StartY: {startY}, Laser: {startLaser.ToLaserDirection()}
+                Width: {repository.Width}, Height: {repository.Height}
+                StartX: {repository.StartX}, StartY: {repository.StartY}, Laser: {repository.StartLaser.ToLaserDirection()}
                 EndX: {exitRoom.X}, EndY: {exitRoom.Y}, Laser: {exitRoom.Laser.ToLaserDirection()}
                 """;
+    }
+    
+    public void SetupMirrors()
+    {
+        foreach (var mirrorDefinition in repository.Mirrors)
+        {
+            // Regex.Split adds empty strings at the head/tail due to pattern matching, so removing those will allow better parsing later
+            var mirror = Regex.Split(mirrorDefinition, "([0-9]+),([0-9]+)([LRlr]{1})([LRlr]{0,1})")
+                .Where(y => !string.IsNullOrWhiteSpace(y)).ToArray();
+            var x = int.Parse(mirror[0]);
+            var y = int.Parse(mirror[1]);
+        
+            // ranging operator allows array selection from 3rd element to end of array
+            var mirrorState = mirror[2..];
+
+            var orientation = mirrorState[0].ToMirrorOrientation();
+            var reflection = MirrorReflection.Both;
+        
+            if (mirrorState.Length == 2)
+                reflection = mirrorState[1].ToMirrorReflection();
+        
+            repository.SetupMirrors(x, y, orientation, reflection);
+        }
     }
 
     public bool GetNextRoom(int x, int y, Laser inputLaser, out NextRoom nextRoomInfo)
@@ -99,7 +82,7 @@ public class RoomService : IRoomService
                 break;
             case Laser.Top:
                 // If laser will not go through top edge of grid
-                if (room.Y != height - 1)
+                if (room.Y != repository.Height - 1)
                 {
                     nextRoomInfo = new NextRoom(room.X, room.Y + 1, Laser.Bottom);
                     return true;
@@ -117,7 +100,7 @@ public class RoomService : IRoomService
                 break;
             case Laser.Right:
                 // if laser will not go through right edge of grid
-                if (room.X != width - 1)
+                if (room.X != repository.Width - 1)
                 {
                     nextRoomInfo = new NextRoom(room.X + 1, room.Y, Laser.Left);
                     return true;
@@ -133,7 +116,7 @@ public class RoomService : IRoomService
 
     /*
      *  Get direction of output laser based on Mirror orientation and reflection, and return the direction the laser will exit
-     *  Output laser direction is opposite the direction of input laser
+     *  Note: Output laser direction is NOT the direction of input laser for the next room
      */
     public Laser GetOutputLaser(Room room, Laser inputLaser)
     {
@@ -282,8 +265,9 @@ public class RoomService : IRoomService
                  * v   v   v
                  */
                 return Laser.Bottom;
+            default:
+                // This is here to make sure all cases are covered, but as the use cases are exhaustive, this should never be reached
+                throw new ArgumentOutOfRangeException(nameof(inputLaser), inputLaser, "Invalid Room/Laser orientation");
         }
-
-        throw new ArgumentOutOfRangeException(nameof(inputLaser), inputLaser, "Invalid Room/Laser orientation");
     }
 }
