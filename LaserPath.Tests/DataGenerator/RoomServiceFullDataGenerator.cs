@@ -21,9 +21,9 @@ public class RoomServiceFullDataGenerator : IEnumerable<object[]>
             """,
             new NextRoom(3, 0, Laser.Bottom),
             """
-            Width: 5, Height: 4
-            StartX: 1, StartY: 0, Laser: V
-            EndX: 3, EndY: 0, Laser: V
+            Dimensions: Width: 5, Height: 4
+            Laser Start: (1, 0), Orientation: V
+            Laser Exit: (3, 0), Orientation: V
             """
         ];
         // Verify Exit Top
@@ -40,9 +40,9 @@ public class RoomServiceFullDataGenerator : IEnumerable<object[]>
             """,
             new NextRoom(3, 3, Laser.Top),
             """
-            Width: 5, Height: 4
-            StartX: 1, StartY: 0, Laser: V
-            EndX: 3, EndY: 3, Laser: V
+            Dimensions: Width: 5, Height: 4
+            Laser Start: (1, 0), Orientation: V
+            Laser Exit: (3, 3), Orientation: V
             """
         ];
         // Verify exit Right
@@ -58,9 +58,9 @@ public class RoomServiceFullDataGenerator : IEnumerable<object[]>
             """,
             new NextRoom(4, 2, Laser.Right),
             """
-            Width: 5, Height: 4
-            StartX: 1, StartY: 0, Laser: V
-            EndX: 4, EndY: 2, Laser: H
+            Dimensions: Width: 5, Height: 4
+            Laser Start: (1, 0), Orientation: V
+            Laser Exit: (4, 2), Orientation: H
             """
         ];
         // Verify Exit Bottom
@@ -77,9 +77,9 @@ public class RoomServiceFullDataGenerator : IEnumerable<object[]>
             """,
             new NextRoom(3, 0, Laser.Bottom),
             """
-            Width: 5, Height: 4
-            StartX: 0, StartY: 2, Laser: H
-            EndX: 3, EndY: 0, Laser: V
+            Dimensions: Width: 5, Height: 4
+            Laser Start: (0, 2), Orientation: H
+            Laser Exit: (3, 0), Orientation: V
             """
         ];
         yield return
@@ -97,9 +97,9 @@ public class RoomServiceFullDataGenerator : IEnumerable<object[]>
             """,
             new NextRoom(0, 1, Laser.Left),
             """
-            Width: 5, Height: 4
-            StartX: 0, StartY: 2, Laser: H
-            EndX: 0, EndY: 1, Laser: H
+            Dimensions: Width: 5, Height: 4
+            Laser Start: (0, 2), Orientation: H
+            Laser Exit: (0, 1), Orientation: H
             """
         ];
         yield return
@@ -117,9 +117,9 @@ public class RoomServiceFullDataGenerator : IEnumerable<object[]>
             """,
             new NextRoom(4, 0, Laser.Bottom),
             """
-            Width: 5, Height: 4
-            StartX: 0, StartY: 0, Laser: H
-            EndX: 4, EndY: 0, Laser: V
+            Dimensions: Width: 5, Height: 4
+            Laser Start: (0, 0), Orientation: H
+            Laser Exit: (4, 0), Orientation: V
             """
         ];
     }

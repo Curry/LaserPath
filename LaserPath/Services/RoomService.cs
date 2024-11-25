@@ -32,9 +32,9 @@ public class RoomService(ILaserRepository repository) : IRoomService
     public string GetConsoleOutput(NextRoom exitRoom)
     {
         return $"""
-                Width: {repository.Width}, Height: {repository.Height}
-                StartX: {repository.StartX}, StartY: {repository.StartY}, Laser: {repository.StartLaser.ToLaserDirection()}
-                EndX: {exitRoom.X}, EndY: {exitRoom.Y}, Laser: {exitRoom.Laser.ToLaserDirection()}
+                Dimensions: Width: {repository.Width}, Height: {repository.Height}
+                Laser Start: ({repository.StartX}, {repository.StartY}), Orientation: {repository.StartLaser.ToLaserDirection()}
+                Laser Exit: ({exitRoom.X}, {exitRoom.Y}), Orientation: {exitRoom.Laser.ToLaserDirection()}
                 """;
     }
     
